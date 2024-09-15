@@ -22,3 +22,4 @@ exit
 
 :found
 %PY% -3 mset9.py
+if %errorlevel% NEQ 0 pause
