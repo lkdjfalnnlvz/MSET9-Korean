@@ -927,7 +927,10 @@ for dirname in fs.listdir("Nintendo 3DS/"):
 
 if ID0Count != 1:
 	prbad(f"Error 04: You don't have 1 ID0 in your Nintendo 3DS folder, you have {ID0Count}!")
-	prinfo("Consult: https://3ds.hacks.guide/troubleshooting-mset9.html for help!")
+	if ID0Count == 0:
+		prinfo("Do not manually create the \"Nintendo 3DS\" folder. Delete the folder for now: the guide will create it on its own.")
+	else:
+		prinfo("Consult: https://3ds.hacks.guide/troubleshooting-mset9.html for help!")
 	exitOnEnter()
 
 for dirname in fs.listdir(ID0):
