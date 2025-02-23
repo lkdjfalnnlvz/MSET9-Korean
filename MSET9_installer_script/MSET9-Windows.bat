@@ -1,8 +1,12 @@
 @echo off
-chcp 65001 >nul
+
+for /f "tokens=4,5 delims=,. "  %%a in ('ver') do set WINBUILD=%%a.%%b
+call :compareVersions %WINBUILD% 10.0
+if %errorlevel% NEQ -1 chcp 65001 >nul
 
 set MINPYVER=3.7
 
+goto tmp
 set PY1="py"
 set PY2="%WINDIR%\py"
 set PY3="%LOCALAPPDATA%\Programs\Python\Launcher\py"
@@ -15,6 +19,7 @@ for /l %%x in (1, 1, 3) do (
 )
 endlocal
 
+:tmp
 set REG1="HKCU\SOFTWARE\Python\PythonCore"
 set REG2="HKLM\SOFTWARE\Python\PythonCore"
 set REG3="HKLM\SOFTWARE\Microsoft\AppModel\Lookaside\user\Software\Python\PythonCore"
