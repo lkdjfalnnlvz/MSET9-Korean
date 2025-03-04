@@ -141,3 +141,4 @@ exit /b
 :divideLetters  versionVar
 for %%C in (a b c d e f g h i j k l m n o p q r s t u v w x y z) do set "%~1=!%~1:%%C=.%%C!"
 exit /b
+
