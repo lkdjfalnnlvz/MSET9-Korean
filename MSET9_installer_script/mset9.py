@@ -19,7 +19,7 @@ def cleanup(remount=False):
 
 def exitOnEnter(errCode = 0, remount=False):
 	cleanup(remount)
-	input("[--] Press Enter to exit...")
+	input("[--] Enter를 눌러 나가기...")
 	exit(errCode)
 
 # wrapper for fs operations. can use pyfilesystem2 directly,
@@ -76,8 +76,8 @@ systmp = None
 def verify_device():
 	systemroot = pathlib.Path(sys.executable).anchor # Never hardcode C:. My Windows drive letter is E:, my SD card or USB drive is often C:.
 	if os.stat(scriptroot).st_dev == os.stat(systemroot).st_dev:
-		prbad("Error 01: Script is not running on your SD card!")
-		prinfo(f"Current location: {scriptroot}")
+		prbad("Error 01: 스크립트가 SD 카드 내에서 실행되고 있지 않습니다!")
+		prinfo(f"현재 경로: {scriptroot}")
 		exitOnEnter()
 
 def dig_for_root():
@@ -95,17 +95,17 @@ def dig_for_root():
 			except:
 				pass # The sanity checks will deal with that. I just don't want the exception to terminate the script.
 
-		with open(os.path.join(scriptroot, "Note from MSET9.txt"), "w") as f:
-			f.write("Hey!\n")
-			f.write("All the MSET9 files have been moved to the root of your SD card.\n\n")
+		with open(os.path.join(scriptroot, "MSET9의 메모.txt"), "w") as f:
+			f.write("저기요!\n")
+			f.write("모든 MSET9 파일이 SD 카드의 루트로 이동되었습니다.\n\n")
 
-			f.write("\"What is the 'root of my SD card'...?\"\n")
-			f.write("The root is 'not inside any folder'.\n")
-			f.write("This is where you can see your 'Nintendo 3DS' folder. (It is not inside the Nintendo 3DS folder itself!)\n\n")
+			f.write("\"'SD 카드의 루트'가 무엇인가요...?\"\n")
+			f.write("루트는 '어떤 폴더 안에도 없는 것'입니다.\n")
+			f.write("'Nintendo 3DS' 폴더를 볼 수 있는 상태입니다. (Nintendo 3DS 폴더 안을 말하는 게 아닙니다!)\n\n")
 
-			f.write("Reference image: https://3ds.hacks.guide/images/screenshots/onboarding/sdroot.png\n\n")
+			f.write("참조 이미지: https://3ds.hacks.guide/images/screenshots/onboarding/sdroot.png\n\n")
 
-			f.write(f"At the time of writing, the root of your SD card is at: '{root}'. Check it out!\n")
+			f.write(f"이 글을 쓰는 시점에서는, SD 카드의 루트는 '{root}'입니다. 확인해 보세요!\n")
 			f.close()
 
 		scriptroot = root
@@ -122,14 +122,14 @@ if osver == "Darwin":
 
 	def tmp_cleanup():
 		global tmpprefix, systmp
-		prinfo("Removing temporary folders...")
+		prinfo("임시 폴더 삭제 중...")
 		import tempfile, shutil
 		if systmp is None:
 			systmp = tempfile.gettempdir()
 		for dirname in os.listdir(systmp):
 			if dirname.startswith(tmpprefix):
 				shutil.rmtree(f"{systmp}/{dirname}")
-		prinfo("Temporary folders removed!")
+		prinfo("임시 폴더 삭제됨!")
 
 	def run_diskutil_and_wait(command, dev):
 		import subprocess
@@ -140,12 +140,12 @@ if osver == "Darwin":
 	if len(sys.argv) < 2:
 		verify_device()
 		if not scriptroot.startswith("/Volumes/"): # Can probably remove this now given the above function but meh!
-			prbad("Error 01: Couldn't find Nintendo 3DS folder! Ensure that you are running this script from the root of the SD card.")
+			prbad("Error 01: Nintendo 3DS 폴더를 찾을 수 없습니다! 이 스크립트를 SD 카드의 루트에서 실행하고 있는지 확인해 주세요.")
 			# should we add some macos specific message?
 			exitOnEnter()
 
 		dig_for_root()
-		prinfo("Resolving device...")
+		prinfo("장치 확인 중...")
 		device = None
 		devid = os.stat(scriptroot).st_dev
 		for devname in os.listdir("/dev"):
@@ -157,10 +157,10 @@ if osver == "Darwin":
 				break
 		if device is None:
 			#prbad("Error :")
-			prbad("Can't find matching device, this shouldn't happen...")
+			prbad("일치하는 장치를 찾을 수 없습니다, 일어나서는 안될 일인데...")
 			exitOnEnter()
 
-		prinfo("Finding previous temporary folder...")
+		prinfo("이전 임시 폴더 찾는 중...")
 		import shutil, tempfile, time
 		systmp = tempfile.gettempdir()
 		tmpdir = None
@@ -177,16 +177,16 @@ if osver == "Darwin":
 				else:
 					shutil.rmtree(dirpath)
 		if tmpdir is None:
-			prinfo("Creating temporary folder...")
+			prinfo("임시 폴더 생성 중...")
 			tmpdir = tempfile.mkdtemp(prefix=tmpprefix)
 			shutil.copyfile(thisfile, f"{tmpdir}/mset9.py")
 
-		prinfo("Trying to unmount SD card...")
+		prinfo("SD 카드 마운트 해제 시도 중...")
 		ret = run_diskutil_and_wait(["umount", "force"], device)
 
 		if ret == 1:
-			prbad("Error 16: Unable to unmount SD card.")
-			prinfo("Please ensure there's no other app using your SD card.")
+			prbad("Error 16: SD 카드의 마운트 해제를 할 수 없습니다.")
+			prinfo("다른 앱이 SD 카드를 사용하고 있진 않은지 확인해주세요.")
 			#tmp_cleanup()
 			exitOnEnter()
 
@@ -197,9 +197,9 @@ if osver == "Darwin":
 	if len(sys.argv) == 3:
 		systmp = sys.argv[2]
 	if not os.path.exists(device):
-		prbad("Error 13: Device doesn't exist.")
-		prinfo("Ensure your SD card is inserted properly.")
-		prinfo("Also, don't eject SD card itself in disk utility, unmount the partition only.")
+		prbad("Error 13: 장치가 존재하지 않습니다.")
+		prinfo("SD 카드가 제대로 삽입되었는지 확인하세요.")
+		prinfo("또한, 디스크 유틸리티에서 SD 카드 자체를 꺼내지 말고, 파티션만 마운트 해제하세요.")
 		#tmp_cleanup()
 		exitOnEnter()
 
@@ -214,7 +214,7 @@ if osver == "Darwin":
 		try:
 			result = subprocess.run(["ldid", "-e", path], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
 			if result.returncode != 0:
-				prbad("Error #: Fail to check venv python ios entitlement")
+				prbad("Error #:  venv python ios 권한 확인에 실패했습니다.")
 				prinfo(f"ldid error (ret={result.returncode})")
 				tmp_cleanup()
 				exitOnEnter()
@@ -269,14 +269,14 @@ if osver == "Darwin":
 			args = ["ldid", "-M", f"-S{entaddxml}", path]
 			result = subprocess.run(args, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
 			if result.returncode != 0:
-				prbad("Error #: Fail to modify venv python ios entitlement")
+				prbad("Error #: venv python ios 권한 수정에 실패했습니다.")
 				prinfo(f"ldid ret={result.returncode}")
 				prinfo("Message:")
 				prinfo(result.stderr)
 
 		except FileNotFoundError:
-			prbad("Error #: Fail to modify venv python ios entitlement")
-			prinfo("wtf? ldid disappeared?")
+			prbad("Error #: venv python ios 권한을 수정하는 데 실패했습니다.")
+			prinfo("뭐죠? ldid가 사라졌나요?")
 			tmp_cleanup()
 			exitOnEnter()
 
@@ -286,7 +286,7 @@ if osver == "Darwin":
 
 		# assuming it's fine if ldid doesn't exist
 		if is_ios() and check_ios_py_entitlement(venv_py) == False:
-			prinfo("fixing entitlement...")
+			prinfo("권한 수정 중...")
 			fix_ios_py_entitlement(venv_py)
 
 		os.environ["PATH"] = os.pathsep.join([venv_bin, *os.environ.get("PATH", "").split(os.pathsep)])
@@ -320,22 +320,22 @@ if osver == "Darwin":
 
 	if "VIRTUAL_ENV" not in os.environ:
 		if os.path.exists(venv_py):
-			prinfo("venv found, activate it...")
+			prinfo("venv 찾음, 활성화 하세요...")
 			activate_venv()
 		elif is_ios():
 			have_perm = check_ios_py_entitlement(sys.executable)
 			if have_perm == None:
-				prinfo("ldid not found, assume your python have proper entitlement")
-				prinfo("if fail later, please install ldid or fix your python manually")
-				prinfo("(require entitlement com.apple.private.security.disk-device-access)")
+				prinfo("ldid를 찾을 수 없습니다, 설치된 Python에 적절한 권한이 있다고 가정하고 진행합니다.")
+				prinfo("만약 실패하게 되면, ldid를 설치하거나 Python을 수동으로 고쳐보세요")
+				prinfo("(필요 권한 com.apple.private.security.disk-device-access)")
 			elif not have_perm:
-				prinfo("need entitlement fix, setting up venv for fixing automatically...")
+				prinfo("권한 수정이 필요하여, venv를 세팅하여 자동으로 고치는 중입니다...")
 				setup_venv()
 
 	try:
 		from pyfatfs.PyFatFS import PyFatFS
 	except ModuleNotFoundError:
-		prinfo("PyFatFS not found, setting up venv for installing automatically...")
+		prinfo("PyFatFS를 찾을 수 없습니다. venv를 세팅하여 자동으로 설치하는 중입니다...")
 		setup_venv()
 		from pyfatfs.PyFatFS import PyFatFS
 
@@ -353,13 +353,13 @@ if osver == "Darwin":
 		#])
 		#try:
 		#	os.execlp("osascript", "osascript", "-e", osascript)
-		prinfo("Input the password of your computer if prompted.")
-		prinfo("(It won't show anything while you're typing, just type it blindly)")
+		prinfo("메시지가 나타나면 컴퓨터의 비밀번호를 입력하세요..")
+		prinfo("(타이핑하는 동안에는 아무것도 표시되지 않습니다. 그냥 타이핑하세요.)")
 		try:
 			import tempfile
 			os.execlp("sudo", "sudo", sys.executable, thisfile, device, tempfile.gettempdir())
 		except:
-			prbad("Error 17: Root privilege is required.")
+			prbad("Error 17: 루트 권한이 필요합니다.")
 			#tmp_cleanup()
 			exitOnEnter(remount=True)
 
@@ -500,16 +500,16 @@ if osver == "Darwin":
 	except PyFATException as e:
 		msg = str(e)
 		if "Cannot open" in msg:
-			prbad("Error 14: Can't open device.")
-			prinfo("Please ensure your SD card is unmounted in disk utility.")
+			prbad("Error 14: 장치를 열 수 없습니다.")
+			prinfo("디스크 유틸리티에서 SD 카드가 마운트 해제되었는지 확인하세요.")
 			if is_ios():
-				prinfo("might also be ios entitlement issue")
-				prinfo("please install ldid or fix your python manually")
-				prinfo("(require entitlement com.apple.private.security.disk-device-access)")
+				prinfo("또한 ios 권한 문제일 수 있습니다")
+				prinfo("ldid를 설치하거나 Python을 수동으로 고쳐주세요")
+				prinfo("(필요 권한 com.apple.private.security.disk-device-access)")
 		elif "Invalid" in msg or "bytes per sector" in msg:
-			prbad("Error 15: Not FAT32 formatted or corrupted filesystem.")
-			prinfo("Please ensure your SD card is properly formatted")
-			prinfo("Consult: https://wiki.hacks.guide/wiki/Formatting_an_SD_card")
+			prbad("Error 15: FAT32로 포맷되지 않았거나 잘못된 파일 시스템입니다.")
+			prinfo("SD 카드가 알맞게 포맷되었는지 확인해주세요")
+			prinfo("찾기: https://wiki.hacks.guide/wiki/Formatting_an_SD_card")
 		#tmp_cleanup()
 		exitOnEnter()
 
@@ -520,7 +520,7 @@ if osver == "Darwin":
 		global fs, device
 		fs.close()
 		if remount and not is_ios():
-			prinfo("Trying to remount SD card...")
+			prinfo("SD 카드 재마운트 시도 중...")
 			run_diskutil_and_wait("mount", device)
 		#tmp_cleanup()
 
@@ -573,10 +573,10 @@ else:
 			try:
 				os.chdir(self.root)
 			except Exception:
-				prbad("Error 08: Couldn't reapply working directory, is SD card reinserted?")
+				prbad("Error 08: 작업 디렉토리를 다시 적용할 수 없습니다. SD 카드를 재삽입했나요?")
 				exitOnEnter()
 		def print_root(self):
-			prinfo(f"Current dir: {self.root}")
+			prinfo(f"현재 경로: {self.root}")
 
 	verify_device()
 	dig_for_root()
@@ -606,28 +606,28 @@ def getInput(options):
 			opt = 0xFFFFFFFF
 
 		if opt not in options:
-			prbad(f"Invalid input, try again. Valid inputs: {str.join(', ', (str(i) for i in options))}")
+			prbad(f"잘못된 입력입니다, 다시 시도하세요. 잘못된 입력: {str.join(', ', (str(i) for i in options))}")
 			continue
 
 		return opt
 
 # Section: insureRoot
 if not fs.exists("Nintendo 3DS/"):
-	prbad("Error 01: Couldn't find Nintendo 3DS folder! Ensure that you are running this script from the root of the SD card.")
-	prbad("If that doesn't work, eject the SD card, and put it back in your console. Turn it on and off again, then rerun this script.")
+	prbad("Error 01: Nintendo 3DS 폴더를 찾을 수 없습니다! 이 스크립트를 SD 카드의 루트에서 실행하고 있는지 확인해주세요.")
+	prbad("그래도 문제가 해결되지 않으면, SD 카드를 꺼낸 후 콘솔에 다시 넣고, 콘솔을 껐다가 다시 켠 후, 이 스크립트를 다시 실행해 보세요.")
 	fs.print_root()
 	exitOnEnter()
 
 # Section: sdWritable
 def writeProtectCheck():
 	global fs
-	prinfo("Checking if SD card is writeable...")
+	prinfo("SD 카드가 쓰기 가능한지 확인 중...")
 	if not fs.is_writable():
-		prbad("Error 02: Your SD card is write protected! If using a full size SD card, ensure that the lock switch is facing upwards.")
-		prinfo("Visual aid: https://nintendohomebrew.com/assets/img/nhmemes/sdlock.png")
+		prbad("Error 02: SD 카드가 쓰기 금지되어 있습니다! 풀 사이즈 SD 카드를 사용하고 있다면, 잠금 스위치가 위로 향해 있는지 확인해주세요.")
+		prinfo("시각 자료: https://nintendohomebrew.com/assets/img/nhmemes/sdlock.png")
 		exitOnEnter()
 	else:
-		prgood("SD card is writeable!")
+		prgood("SD 카드가 쓰기 가능합니다!")
 
 # Section: SD card free space
 # ensure 16MB free space
@@ -638,23 +638,23 @@ if not fs.ensurespace(16 * 1024 * 1024):
 	exitOnEnter()
 
 clearScreen()
-print(f"MSET9 {VERSION} SETUP by zoogie, Aven, DannyAAM and thepikachugamer")
-print("What is your console model and version?")
-print("Old 3DS has two shoulder buttons (L and R)")
-print("New 3DS has four shoulder buttons (L, R, ZL, ZR)")
+print(f"MSET9 {VERSION} SETUP by zoogie, Aven, DannyAAM and thepikachugamer - 한국어 번역 lkdjfalnnlvz")
+print("당신의 콘솔 버전과 모델은 무엇인가요?")
+print("구형 3DS는 트리거 버튼이 두 개 있습니다 (L과 R)")
+print("New 3DS는 트리거 버튼이 네 개 있습니다 (L, R, ZL, ZR)")
 
 print("\n-- Please type in a number then hit return --\n")
 
 consoleNames = {
-	1: "Old 3DS/2DS, 11.8.0 to 11.17.0",
-	2: "New 3DS/2DS, 11.8.0 to 11.17.0",
-	3: "Old 3DS/2DS, 11.4.0 to 11.7.0",
-	4: "New 3DS/2DS, 11.4.0 to 11.7.0"
+	1: "구형 3DS/2DS, 11.8.0부터 11.17.0",
+	2: "New 3DS/2DS, 11.8.0부터 11.17.0",
+	3: "구형 3DS/2DS, 11.4.0부터 11.7.0",
+	4: "New 3DS/2DS, 11.4.0부터 11.7.0"
 }
 
-print("Enter one of these four numbers!")
+print("저 4개의 숫자 중 하나를 입력해주세요!")
 for i in consoleNames:
-	print(f"Enter {i} for: {consoleNames[i]}")
+	print(f"{consoleNames[i]}은(는) {i}을(를) 입력해주세요.")
 
 # print("Enter 1 for: Old 3DS/2DS, 11.8.0 to 11.17.0")
 # print("Enter 2 for: New 3DS/2DS, 11.8.0 to 11.17.0")
@@ -675,7 +675,7 @@ if consoleIndex < 0:
 
 ID0, ID0Count, ID1, ID1Count = "", 0, "", 0
 
-haxStates = ["\033[30;1mID1 not created\033[0m", "\033[33;1mNot ready - check MSET9 status for more details\033[0m", "\033[32mReady\033[0m", "\033[32;1mInjected\033[0m", "\033[32mRemoved trigger file\033[0m"]
+haxStates = ["\033[30;1mID1이 생성되지 않았습니다\033[0m", "\033[33;1m준비 안됨 - 자세한 내용은 MSET9 상태를 확인하세요.\033[0m", "\033[32m준비됨\033[0m", "\033[32;1m주입됨\033[0m", "\033[32m트리거 파일 삭제됨\033[0m"]
 haxState = 0
 
 realID1Path = ""
@@ -692,59 +692,59 @@ triggerFilePath = ""
 def createHaxID1():
 	global fs, ID0, hackedID1Path, realID1Path, realID1BackupTag
 
-	print("\033[0;33m=== DISCLAIMER ===\033[0m") # 5;33m? The blinking is awesome but I also don't want to frighten users lol
+	print("\033[0;33m=== 부연 설명 ===\033[0m") # 5;33m? The blinking is awesome but I also don't want to frighten users lol
 	print()
-	print("This process will temporarily reset all your 3DS data.")
-	print("All your applications and themes will disappear.")
-	print("This is perfectly normal, and if everything goes right, it will re-appear")
-	print("at the end of the process.")
+	print("이 과정은 당신의 3DS 데이터를 일시적으로 초기화합니다.")
+	print("설치한 모든 앱과 테마가 사라질 것입니다.")
+	print("이는 완전히 정상적인 현상이며, 모든 것이 제대로 진행된다면,")
+	print("마무리 과정에서 다시 나타날 것입니다.")
 	print()
-	print("In any case, it is highly recommended to make a backup of your SD card's contents to a folder on your PC.")
-	print("(Especially the 'Nintendo 3DS' folder.)")
+	print("어떤 경우든 SD 카드의 내용을 PC의 폴더에 백업하는 것을 강력히 권장합니다.")
+	print("(특히 'Nintendo 3DS' 폴더)")
 	print()
 
 	if osver == "Linux": # ...
-		print("(on Linux, things like to not go right - please ensure that your SD card is mounted with the 'utf8' option.)")
+		print("(Linux에선, 제대로 진행되지 않을 수 있습니다 - SD 카드가 'utf8' 옵션으로 마운트되어 있는지 확인해 주세요.)")
 		print()
 
-	print("Input '1' again to confirm.")
-	print("Input '2' to cancel.")
+	print("'1'을 다시 입력해 확인")
+	print("'2'를 입력하여 취소")
 	time.sleep(3)
 	if getInput(range(1, 2)) != 1:
 		print()
-		prinfo("Cancelled.")
+		prinfo("취소되었습니다.")
 		exitOnEnter(remount=True)
 
 	hackedID1Path = ID0 + "/" + hackedID1
 
 	try:
-		prinfo("Creating hacked ID1...")
+		prinfo("해킹된 ID1 생성 중...")
 		fs.mkdir(hackedID1Path)
-		prinfo("Creating dummy databases...")
+		prinfo("더미 데이터베이스 생성 중...")
 		fs.mkdir(hackedID1Path + "/dbs")
 		fs.open (hackedID1Path + "/dbs/title.db", "w").close()
 		fs.open (hackedID1Path + "/dbs/import.db", "w").close()
 	except Exception as exc:
 		if isinstance(exc, OSError) and osver == "Windows" and exc.winerror == 234: # WinError 234 my love
-			prbad("Error 18: Windows locale settings are broken!")
-			prinfo("Consult https://3ds.hacks.guide/troubleshooting-mset9.html for instructions.")
-			prinfo("If you need help, join Nintendo Homebrew on Discord: https://discord.gg/nintendohomebrew")
+			prbad("Error 18: Windows 로캘 설정이 망가졌습니다!")
+			prinfo("https://3ds.hacks.guide/troubleshooting-mset9.html 에서 설명을 확인하세요.")
+			prinfo("도움이 필요하다면, Discord의 Nintendo Homebrew 채널에 가입하세요: https://discord.gg/nintendohomebrew")
 		elif isinstance(exc, OSError) and osver == "Linux" and exc.errno == 22: # Don't want this message to display on Windows if it ever manages to
-			prbad("Failed to create hacked ID1!") # Give this an error number?
-			prbad(f"Error details: {str(exc)}")
-			prinfo("Please unmount your SD card and remount it with the 'utf8' option.") # Should we do this ourself? Like look at macOS
+			prbad("해킹된 ID1을 생성하는데 실패했습니다!") # Give this an error number?
+			prbad(f"에러 세부 사항: {str(exc)}")
+			prinfo("SD 카드를 마운트 해제하고 'utf8' 옵션으로 다시 마운트해 보세요.") # Should we do this ourself? Like look at macOS
 		else:
-			prbad("An unknown error occured!")
-			prbad(f"Error details: {str(exc)}")
-			prinfo("Join Nintendo Homebrew on Discord for help: https://discord.gg/nintendohomebrew")
+			prbad("알 수 없는 오류가 발생했습니다!")
+			prbad(f"에러 세부 사항: {str(exc)}")
+			prinfo("도움을 위해선 Discord의 Nintendo Homebrew 채널에 가입하세요: https://discord.gg/nintendohomebrew")
 
 		exitOnEnter()
 
 	if not realID1Path.endswith(realID1BackupTag):
-		prinfo("Backing up original ID1...")
+		prinfo("기존 ID1 백업 중...")
 		fs.rename(realID1Path, realID1Path + realID1BackupTag)
 
-	prgood("Created hacked ID1.")
+	prgood("해킹된 ID1 생성 완료.")
 	exitOnEnter()
 
 titleDatabasesGood = False
@@ -754,7 +754,7 @@ miiExtdataGood = False
 def sanity():
 	global fs, hackedID1Path, titleDatabasesGood, menuExtdataGood, miiExtdataGood
 
-	prinfo("Checking databases...")
+	prinfo("데이터베이스 생성 중중...")
 	checkTitledb  = softcheck(hackedID1Path + "/dbs/title.db",  0x31E400)
 	checkImportdb = softcheck(hackedID1Path + "/dbs/import.db", 0x31E400)
 	titleDatabasesGood = not (checkTitledb or checkImportdb)
@@ -765,14 +765,14 @@ def sanity():
 		fs.open(hackedID1Path + "/dbs/title.db",  "w").close()
 		fs.open(hackedID1Path + "/dbs/import.db", "w").close()
 
-	prinfo("Checking for HOME Menu extdata...")
+	prinfo("HOME 메뉴 추가 데이터 확인 중...")
 	for i in homeMenuExtdata:
 		extdataRegionCheck = hackedID1Path + f"/extdata/00000000/{i:08X}"
 		if fs.exists(extdataRegionCheck):
 			menuExtdataGood = True
 			break
 	
-	prinfo("Checking for Mii Maker extdata...")
+	prinfo("Mii 스튜디오 추가 데이터 확인 중...")
 	for i in miiMakerExtdata:
 		extdataRegionCheck = hackedID1Path + f"/extdata/00000000/{i:08X}"
 		if fs.exists(extdataRegionCheck):
