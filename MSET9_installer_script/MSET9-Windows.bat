@@ -35,16 +35,16 @@ endlocal
 
 
 
-echo Python 3 is not installed.
-echo Please install Python 3 and try again.
+echo Python 3가 설치되어 있지 않습니다.
+echo Python 3를 설치하고 다시 시도해주세요.
 echo https://www.python.org/downloads/
 echo.
 pause
 exit
 
 :outdated
-echo Python %PYVER% is too old, you need %MINPYVER% or later.
-echo Please install newer version and try again.
+echo Python %PYVER%은 너무 오래된 버전입니다, %MINPYVER% 이상 버전이 필요합니다.
+echo 새로운 버전을 받고 다시 시도해주세요.
 echo https://www.python.org/downloads/
 echo.
 pause
