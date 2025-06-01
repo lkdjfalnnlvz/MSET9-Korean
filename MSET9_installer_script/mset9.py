@@ -754,7 +754,7 @@ miiExtdataGood = False
 def sanity():
 	global fs, hackedID1Path, titleDatabasesGood, menuExtdataGood, miiExtdataGood
 
-	prinfo("데이터베이스 생성 중중...")
+	prinfo("데이터베이스 생성 중...")
 	checkTitledb  = softcheck(hackedID1Path + "/dbs/title.db",  0x31E400)
 	checkImportdb = softcheck(hackedID1Path + "/dbs/import.db", 0x31E400)
 	titleDatabasesGood = not (checkTitledb or checkImportdb)
