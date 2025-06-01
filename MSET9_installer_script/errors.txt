@@ -1,17 +1,17 @@
-Error 01: Not running on the SD Card root. /Nintendo 3DS/ not found.
-Error 02: Write protected SD Card. Ensure switch is facing up.
-Error 03: Attempting to change target console version during exploit.
-Error 04: Multiple ID0s, follow MSET9 Troubleshooting page.
-Error 05: Multiple ID1s, follow MSET9 Troubleshooting page.
-Error 06: Not enough free space on disk. Clean out unused files.
-Error 07: Missing/Malformed file. Reextract MSET9 zip file.
-Error 08: Could not change back into SD directory. Ensure the SD Card has been reinserted.
+Error 01: SD 카드 루트에서 실행하고 있지 않습니다. /Nintendo 3DS/ 폴더를 찾을 수 없습니다.
+Error 02: 쓰기 금지된 SD 카드입니다. 스위치가 위로 향해있는지 확인해주세요.
+Error 03: 익스플로잇 도중 대상 콘솔 버전을 변경하려고 시도했습니다.
+Error 04: 다중 ID0 확인됨, MSET9 문제 해결 페이지를 따라 주세요.
+Error 05: 다중 ID1 확인됨, MSET9 문제 해결 페이지를 따라 주세요.
+Error 06: 디스크 용량이 충분하지 않습니다. 사용하지 않는 파일을 삭제해 주세요.
+Error 07: 파일이 누락되었거나 잘못되었습니다. MSET9 zip 파일을 다시 압축 해제해 주세요.
+Error 08: SD 카드 경로로 다시 이동할 수 없습니다. SD 카드가 재삽입되었는지 확인해주세요.
 
-Error 13: Device doesn't exist.
-Error 14: Can't open device.
-Error 15: Not FAT32 formatted or corrupted filesystem.
-Error 16: Unable to umount SD card.
-Error 17: Root privilege is required.
-Error 18: Winerror 234, Windows UTF Settings needs adjustment, follow MSET9 Troubleshooting page
+Error 13: 장치가 존재하지 않습니다.
+Error 14: 장치를 열 수 없습니다.
+Error 15: FAT32로 포맷되지 않았거나 잘못된 파일 시스템입니다.
+Error 16: SD 카드를 마운트 해제할 수 없습니다.
+Error 17: 루트 권한이 필요합니다.
+Error 18: Winerror 234, Windows UTF 설정에 조정이 필요합니다, MSET9 문제 해결 페이지를 따라 주세요.
 
-MSET9 Troubleshooting Page: https://3ds.hacks.guide/troubleshooting#installing-boot9strap-mset9
+MSET9 문제 해결 페이지: https://3ds.hacks.guide/ko_KR/troubleshooting-mset9.html
